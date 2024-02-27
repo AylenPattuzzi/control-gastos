@@ -4,7 +4,6 @@ import IconoNuevoGasto from './img/nuevo-gasto.svg'
 import Modal from './components/Modal'
 import { generarId } from './helpers'
 import ListadoGastos from './components/ListadoGastos'
-import { number } from 'prop-types'
 import Filtros from './components/Filtros'
 
 function App() {
