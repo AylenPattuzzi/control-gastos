@@ -14,3 +14,5 @@ export const formatearFecha = fecha => {
     }
     return fechaNueva.toLocaleDateString('es-ES', opciones)
 }
+
+export const pasarDolares = (cantidad, valor) => (cantidad / valor).toFixed(2)

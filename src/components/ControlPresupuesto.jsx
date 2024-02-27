@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar'
 import 'react-circular-progressbar/dist/styles.css'
+import { pasarDolares } from '../helpers'
+import axios from 'axios'
 
 
 const ControlPresupuesto = ({
@@ -14,6 +16,7 @@ const ControlPresupuesto = ({
     const [disponible, setDisponible] = useState(0)
     const [gastado, setGastado] = useState(0)
     const [porcentaje, setPorcentaje] = useState(0)
+    const [dolar, setDolar] = useState(undefined)
 
     useEffect(() => {
         const totalGastado = gastos.reduce((total, gasto) => gasto.cantidad + total, 0)
@@ -29,11 +32,24 @@ const ControlPresupuesto = ({
         }, 1500);
     }, [gastos])
 
+    useEffect(() => {
+        
+        axios.get('https://dolarapi.com/v1/dolares/blue')
+            .then(function (response) {
+                setDolar(response.data.venta)
+            })
+            .catch(function (error) {
+                console.log(error);
+                alert("La API del dolar no funciona")
+            })
+    }, [])
+    
+    
 
     const formatearCantidad = (cantidad) => {
         return cantidad.toLocaleString('en-US', {
             style: 'currency',
-            currency: 'USD'
+            currency: 'ARS'
         })
     }
 
@@ -48,7 +64,10 @@ const ControlPresupuesto = ({
 
     return (
         <div className='contenedor-presupuesto contenedor sombra dos-columnas'>
-            <div>
+        {
+            dolar != undefined ? (
+                <>
+                <div>
                 <CircularProgressbar
                     styles={buildStyles({
                         pathColor: porcentaje > 100 ? '#DC2626' : '#3B82F6',
@@ -71,15 +90,20 @@ const ControlPresupuesto = ({
                     Reiniciar App
                 </button>
                 <p>
-                    <span>Presupuesto:</span>{formatearCantidad(Number(presupuesto))}
+                    <span>Presupuesto: </span>{formatearCantidad(Number(presupuesto))} - <small>(USD {pasarDolares(Number(presupuesto), dolar)})</small>
                 </p>
                 <p className={`{disponible < 0 ? 'negativo' : ''}`}>
-                    <span>Disponible:</span>{formatearCantidad(disponible)}
+                    <span>Disponible: </span>{formatearCantidad(disponible)} - <small>(USD {pasarDolares(Number(disponible), dolar)})</small> 
                 </p>
                 <p>
-                    <span>Gastado:</span>{formatearCantidad(gastado)}
+                    <span>Gastado: </span>{formatearCantidad(gastado)} - <small>(USD {pasarDolares(Number(gastado), dolar)})</small>
                 </p>
             </div>
+                </>
+            ) : (
+                <span>Cargando...</span>
+            )
+        }
         </div>
     )
 }

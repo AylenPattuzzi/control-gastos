@@ -13,7 +13,6 @@ const Modal = ({
 }) => {
 
     const [mensaje, setMensaje] = useState('')
-
     const [nombre, setNombre] = useState('')
     const [cantidad, setCantidad] = useState('')
     const [categoria, setCategoria] = useState('')

@@ -37,13 +37,13 @@ function App() {
     localStorage.setItem('presupuesto', presupuesto ?? 0)
   }, [presupuesto])
 
-  // useEffect(() => {
-  //   const presupuestoLS = number(localStorage.setItem('presupuesto')) ?? [];
+  useEffect(() => {
+    const presupuestoLS = Number(localStorage.setItem('presupuesto', presupuesto ?? 0)) ;
 
-  //   if (presupuestoLS > 0) {
-  //     setIsValidPresupuesto(true)
-  //   }
-  // }, [])
+    if (presupuestoLS > 0) {
+      setIsValidPresupuesto(true)
+    }
+  }, [])
 
   useEffect(() => {
     localStorage.setItem('gastos', JSON.stringify(gastos) ?? 0)
